@@ -6,9 +6,7 @@ const getUsers = (req, res) => {
   User.find({})
     .orFail()
     .then((users) => res.status(200).send(users))
-    .catch((err) => {
-      return res.status(500).send({ message: err.message });
-    });
+    .catch((err) => res.status(500).send({ message: err.message }));
 };
 
 const createUser = (req, res) => {

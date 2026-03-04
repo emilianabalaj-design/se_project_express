@@ -18,7 +18,9 @@ app.use((req, res, next) => {
 
 app.use(routes);
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
+  void next;
+
   const { statusCode = 500, message } = err;
   res.status(statusCode).send({
     message: statusCode === 500 ? "An error occurred" : message,

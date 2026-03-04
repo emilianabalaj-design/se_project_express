@@ -9,9 +9,16 @@ const PORT = 3001;
 app.use(express.json());
 app.use(auth);
 
+app.use((req, res, next) => {
+  req.user = {
+    _id: "5d8b8592978f8bd833ca8133",
+  };
+  next();
+});
+
 app.use(routes);
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
   res.status(statusCode).send({
     message: statusCode === 500 ? "An error occurred" : message,

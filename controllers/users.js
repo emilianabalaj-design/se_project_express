@@ -1,8 +1,6 @@
 const User = require("../models/user");
 
 const getUsers = (req, res) => {
-  const { userId } = req.params;
-
   User.find({})
     .orFail()
     .then((users) => res.status(200).send(users))

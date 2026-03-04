@@ -11,7 +11,7 @@ app.use(auth);
 
 app.use(routes);
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   const { statusCode = 500, message } = err;
   res.status(statusCode).send({
     message: statusCode === 500 ? "An error occurred" : message,
@@ -20,9 +20,9 @@ app.use((err, req, res, next) => {
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/wtwr_db")
-  .then(() => console.log("Connected to DB"))
+  .then(() => console.error("Connected to DB"))
   .catch(console.error);
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  // console.log(`Server is running on port ${PORT}`);
 });

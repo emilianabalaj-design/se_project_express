@@ -2,7 +2,6 @@ const ClothingItem = require("../models/clothingItem");
 
 const createItem = (req, res, next) => {
   const { name, weather, imageUrl } = req.body;
-  const owner = req.user._id;
 
   ClothingItem.create({
     name,
@@ -60,8 +59,11 @@ const likeItem = (req, res, next) => {
       res.status(200).send(item);
     })
     .catch((err) => {
-      if (err.name === "CastError") err.statusCode = 400;
-      next(err);
+      const error = err;
+      if (error.name === "CastError") {
+        error.statusCode = 400;
+      }
+      next(error);
     });
 };
 
@@ -82,8 +84,11 @@ const dislikeItem = (req, res, next) => {
       res.status(200).send(item);
     })
     .catch((err) => {
-      if (err.name === "CastError") err.statusCode = 400;
-      next(err);
+      const error = err;
+      if (error.name === "CastError") {
+        error.statusCode = 400;
+      }
+      next(error);
     });
 };
 

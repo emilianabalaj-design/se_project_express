@@ -25,7 +25,7 @@ app.use("/items", clothingItemsRouter);
 
 app.use(routes);
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   const { statusCode = 500, message } = err;
   res.status(statusCode).send({
     message: statusCode === 500 ? "An error occurred" : message,

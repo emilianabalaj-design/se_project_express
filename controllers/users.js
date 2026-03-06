@@ -3,11 +3,10 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const { JWT_SECRET } = require("../utils/config");
 
-const getUsers = (req, res) => {
+const getUsers = (req, res, next) => {
   User.find({})
-    .orFail()
     .then((users) => res.status(200).send(users))
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch(next);
 };
 
 const createUser = (req, res, next) => {
@@ -15,15 +14,15 @@ const createUser = (req, res, next) => {
 
   bcrypt
     .hash(password, 10)
-    .then((hash) => {
-      return User.create({
+    .then((hash) =>
+      User.create({
         name,
         avatar,
         weather,
         email,
         password: hash,
-      });
-    })
+      })
+    )
     .then((user) => {
       res.status(201).send({
         _id: user._id,
@@ -48,7 +47,7 @@ const createUser = (req, res, next) => {
     });
 };
 
-const login = (req, res, next) => {
+const login = (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {

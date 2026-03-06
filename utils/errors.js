@@ -1,34 +1,8 @@
-class BadRequestError extends Error {
-  constructor(message) {
+class AppError extends Error {
+  constructor(message, statusCode) {
     super(message);
-    this.statusCode = 400;
+    this.statusCode = statusCode;
   }
 }
 
-class NotFoundError extends Error {
-  constructor(message) {
-    super(message);
-    this.statusCode = 404;
-  }
-}
-
-class ForbiddenError extends Error {
-  constructor(message) {
-    super(message);
-    this.statusCode = 403;
-  }
-}
-
-class UnauthorizedError extends Error {
-  constructor(message) {
-    super(message);
-    this.statusCode = 401;
-  }
-}
-
-module.exports = {
-  BadRequestError,
-  NotFoundError,
-  ForbiddenError,
-  UnauthorizedError,
-};
+module.exports = AppError;

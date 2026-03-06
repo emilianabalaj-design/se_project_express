@@ -1,4 +1,7 @@
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const { JWT_SECRET } = require("../utils/config");
 
 const getUsers = (req, res) => {
   User.find({})
@@ -7,17 +10,74 @@ const getUsers = (req, res) => {
     .catch((err) => res.status(500).send({ message: err.message }));
 };
 
-const createUser = (req, res) => {
-  const { name, avatar } = req.body;
-  User.create({ name, avatar })
-    .then((user) => res.status(201).send(user))
+const createUser = (req, res, next) => {
+  const { name, avatar, weather, email, password } = req.body;
+
+  bcrypt
+    .hash(password, 10)
+    .then((hash) => {
+      return User.create({
+        name,
+        avatar,
+        weather,
+        email,
+        password: hash,
+      });
+    })
+    .then((user) => {
+      res.status(201).send({
+        _id: user._id,
+        name: user.name,
+        avatar: user.avatar,
+        weather: user.weather,
+        email: user.email,
+      });
+    })
     .catch((err) => {
-      console.error(err);
-      if (err.name === "ValidationError") {
-        return res.status(400).send({ message: err.message });
+      if (err.code === 11000) {
+        res.status(409).send({ message: "Email already exists" });
+        return;
       }
-      return res.status(500).send({ message: err.message });
+
+      if (err.name === "ValidationError") {
+        res.status(400).send({ message: "Invalid user data" });
+        return;
+      }
+
+      next(err);
     });
+};
+
+const login = (req, res, next) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).send({ message: "Invalid user data" });
+  }
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+        expiresIn: "7d",
+      });
+
+      res.send({ token });
+    })
+    .catch(() => {
+      res.status(401).send({ message: "Incorrect email or password" });
+    });
+};
+
+const getCurrentUser = (req, res, next) => {
+  User.findById(req.user._id)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: "User not found" });
+      }
+
+      return res.send(user);
+    })
+    .catch(next);
 };
 
 const getUserById = (req, res) => {
@@ -37,4 +97,34 @@ const getUserById = (req, res) => {
     });
 };
 
-module.exports = { getUsers, getUserById, createUser };
+const updateProfile = (req, res, next) => {
+  const { name, avatar } = req.body;
+
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, avatar },
+    { new: true, runValidators: true }
+  )
+    .orFail()
+    .then((user) => res.send(user))
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        return res.status(400).send({ message: "Invalid user data" });
+      }
+
+      if (err.name === "DocumentNotFoundError") {
+        return res.status(404).send({ message: "User not found" });
+      }
+
+      return next(err);
+    });
+};
+
+module.exports = {
+  getUsers,
+  getUserById,
+  getCurrentUser,
+  createUser,
+  login,
+  updateProfile,
+};

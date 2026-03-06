@@ -10,7 +10,13 @@ const createItem = (req, res, next) => {
     owner: req.user._id,
   })
     .then((item) => res.status(201).send(item))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        return res.status(400).send({ message: "Invalid data" });
+      }
+
+      return next(err);
+    });
 };
 
 const getItems = (req, res) => {
@@ -36,10 +42,28 @@ const updateItem = (req, res) => {
 const deleteItem = (req, res, next) => {
   const { itemId } = req.params;
 
-  ClothingItem.findByIdAndDelete(itemId)
+  ClothingItem.findById(itemId)
     .orFail()
-    .then((item) => res.status(200).send(item))
-    .catch(next);
+    .then((item) => {
+      if (item.owner.toString() !== req.user._id) {
+        return res.status(403).send({ message: "Forbidden" });
+      }
+
+      return ClothingItem.findByIdAndDelete(itemId).then(() =>
+        res.send({ message: "Item deleted" })
+      );
+    })
+    .catch((err) => {
+      if (err.name === "DocumentNotFoundError") {
+        return res.status(404).send({ message: "Item not found" });
+      }
+
+      if (err.name === "CastError") {
+        return res.status(400).send({ message: "Invalid item id" });
+      }
+
+      return next(err);
+    });
 };
 
 const likeItem = (req, res, next) => {

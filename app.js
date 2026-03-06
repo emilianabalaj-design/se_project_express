@@ -1,24 +1,31 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const routes = require("./routes");
 const auth = require("./middlewares/auth");
+
+const usersRouter = require("./routes/users");
+const clothingItemsRouter = require("./routes/clothingItem");
+
+const { login, createUser } = require("./controllers/users");
 
 const app = express();
 const PORT = 3001;
 
+app.use(cors());
 app.use(express.json());
+
+app.post("/signin", login);
+app.post("/signup", createUser);
+
 app.use(auth);
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: "5d8b8592978f8bd833ca8133",
-  };
-  next();
-});
+app.use("/users", usersRouter);
+app.use("/items", clothingItemsRouter);
 
 app.use(routes);
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
   res.status(statusCode).send({
     message: statusCode === 500 ? "An error occurred" : message,

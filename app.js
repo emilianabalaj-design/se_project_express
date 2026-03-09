@@ -4,9 +4,6 @@ const cors = require("cors");
 const routes = require("./routes");
 const auth = require("./middlewares/auth");
 
-const usersRouter = require("./routes/users");
-const clothingItemsRouter = require("./routes/clothingItem");
-
 const { login, createUser } = require("./controllers/users");
 
 const app = express();

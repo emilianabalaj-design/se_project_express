@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const routes = require("./routes");
+const { requestLogger, errorLogger } = require("./middlewares/logger");
 const auth = require("./middlewares/auth");
 
 const { login, createUser } = require("./controllers/users");
@@ -12,11 +13,16 @@ const PORT = 3001;
 app.use(cors());
 app.use(express.json());
 
+app.use(requestLogger);
+
 app.post("/signin", login);
 app.post("/signup", createUser);
 
 app.use(auth);
+
 app.use(routes);
+
+app.use(errorLogger);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {

@@ -12,18 +12,10 @@ const PORT = 3001;
 app.use(cors());
 app.use(express.json());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: "5d8b8592978f8bd833ca8133",
-  };
-  next();
-});
-
 app.post("/signin", login);
 app.post("/signup", createUser);
 
 app.use(auth);
-
 app.use(routes);
 
 // eslint-disable-next-line no-unused-vars

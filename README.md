@@ -49,6 +49,17 @@ Check out this video where I explain my project and the challenges I faced:
 
 [Watch the video] https://www.loom.com/share/c315cb3757e74273a6e66f57dca34eca
 
+## Fronend Repository
+
+Frontend project:
+
+https://github.com/emilianabalaj-design/se_project_react
+
+## Author
+
+Emiliana Balaj
+TripleTen Software Engineering Program
+
 ```
 
 ```

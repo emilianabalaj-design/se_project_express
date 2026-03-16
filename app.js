@@ -35,7 +35,7 @@ app.use((err, req, res, next) => {
 
 mongoose
   .connect(
-    "mongodb+srv://emilianabalaj_db_user:Tirana2016.@cluster0.khws6wp.mongodb.net/?appName=Cluster0"
+    "mongodb+srv://emilianabalaj_db_user:Tirana2016Atlas@cluster0.khws6wp.mongodb.net/wtwr_db?retryWrites=true&w=majority"
   )
   .then(() => console.log("Connected to DB"))
   .catch(console.error);

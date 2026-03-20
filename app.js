@@ -18,8 +18,6 @@ app.use(requestLogger);
 app.post("/signin", login);
 app.post("/signup", createUser);
 
-app.use(auth);
-
 app.use(routes);
 
 app.use(errorLogger);
@@ -30,11 +28,10 @@ app.use((err, req, res, next) => {
 
   res.status(statusCode).send({
     message: statusCode === 500 ? "An error occurred" : message,
-  });
 });
-
+});
 mongoose
-  .connect(
+.connect(
     "mongodb+srv://emilianabalaj_db_user:Tirana123@cluster0.khws6wp.mongodb.net/wtwr_db?retryWrites=true&w=majority"
   )
   .then(() => console.log("Connected to DB"))

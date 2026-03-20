@@ -18,10 +18,6 @@ app.use(requestLogger);
 app.post("/signin", login);
 app.post("/signup", createUser);
 
-app.get("/testing", (req, res) => {
-  res.send("Backend update works!");
-});
-
 app.use(auth);
 
 app.use(routes);

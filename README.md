@@ -66,10 +66,7 @@ This API uses JSON Web Tokens (JWT) for authentication.
 
 ## Deployment
 
-The backend is deployed on Google Cloud using a virtual machine and PM2.
-
-Base URL:
-https://api.emi28-app.com
+The backend is deployed on Google Cloud using a virtual machine, Nginx, and PM2.
 
 ---
 
@@ -80,17 +77,11 @@ Install dependencies:
 bash
 npm install
 
-## Project Pitch Video
+## Project Acces
 
-Check out this video where I explain my project and the challenges I faced:
-
-[Watch the video] https://www.loom.com/share/c315cb3757e74273a6e66f57dca34eca
-
-## Fronend Repository
-
-Frontend project:
-
-https://github.com/emilianabalaj-design/se_project_react
+- **Backend URL:** http://35.231.187.253
+- **Project Video:** https://www.loom.com/share/c315cb3757e74273a6e66f57dca34eca
+- **Frontend project:** https://github.com/emilianabalaj-design/se_project_react
 
 ## Author
 

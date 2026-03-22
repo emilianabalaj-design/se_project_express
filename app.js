@@ -34,12 +34,10 @@ app.use((err, req, res, next) => {
   });
 });
 mongoose
-  .connect(
-    "mongodb+srv://emilianabalaj_db_user:Tirana123@cluster0.khws6wp.mongodb.net/wtwr_db?retryWrites=true&w=majority"
-  )
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log("Connected to DB"))
   .catch(console.error);
 
-app.listen(3001, () => {
+app.listen(3001, "0.0.0.0", () => {
   console.log("Server is running on port 3001");
 });

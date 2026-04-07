@@ -14,7 +14,7 @@ const PORT = 3001;
 
 app.use(
   cors({
-    origin: ["https://se-project-react-mu.vercel.app/"],
+    origin: ["https://se-project-react-mu.vercel.app"],
     credentials: true,
   })
 );

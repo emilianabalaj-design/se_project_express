@@ -14,7 +14,10 @@ const PORT = 3001;
 
 app.use(
   cors({
-    origin: ["https://se-project-react-mu.vercel.app"],
+    origin: [
+      "https://emiliana.strangled.net",
+      "https://www.emiliana.strangled.net",
+    ],
     credentials: true,
   })
 );
@@ -22,14 +25,20 @@ app.use(express.json());
 
 app.use(requestLogger);
 
+app.get("/crash-test", () => {
+  setTimeout(() => {
+    throw new Error("Server will crash now");
+  }, 0);
+});
+
 app.post(
   "/signup",
   celebrate({
     body: Joi.object().keys({
-      email: Joi.string().required().email(),
+      email: Joi.string().email().required(),
       password: Joi.string().required(),
-      name: Joi.string(),
-      avatar: Joi.string().uri(),
+      name: Joi.string().required().min(2).max(30),
+      avatar: Joi.string().uri().required(),
     }),
   }),
   createUser
@@ -39,7 +48,7 @@ app.post(
   "/signin",
   celebrate({
     body: Joi.object().keys({
-      email: Joi.string().required().email(),
+      email: Joi.string().email().required(),
       password: Joi.string().required(),
     }),
   }),

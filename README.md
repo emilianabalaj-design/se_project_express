@@ -79,7 +79,7 @@ npm install
 
 ## Project Acces
 
-- **Backend URL:** http://35.231.187.253
+- **Backend URL:** https://api.emi28-app.com
 - **Project Video:** https://www.loom.com/share/c315cb3757e74273a6e66f57dca34eca
 - **Frontend project:** https://github.com/emilianabalaj-design/se_project_react
 
